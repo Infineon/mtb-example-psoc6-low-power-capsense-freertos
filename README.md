@@ -14,6 +14,7 @@ This code example demonstrates how to create a low-power CapSense® design using
 ## Supported Toolchains (make variable 'TOOLCHAIN')
 
 - GNU Arm® Embedded Compiler v9.3.1 (GCC_ARM) - Default value of `TOOLCHAIN`
+- Arm compiler v6.14.1 (ARM)
 - IAR C/C++ compiler v8.42.2 (IAR)
 
 ## Supported Kits (make variable 'TARGET')
