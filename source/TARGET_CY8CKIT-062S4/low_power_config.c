@@ -63,18 +63,14 @@
 *******************************************************************************/
 void retain_sram_selectively(void)
 {
-    /* Do not disable block 0 of SRAM 0, and entire SRAM2 for this target. Block
-     * 0 in SRAM0 contains SRAM section for CM0+ CPU and the last 2KB in SRAM2
-     * is reserved for system call, which if disabled will result in unexpected
-     * behavior. 256 KB of SRAM2 is retained because the SRAM2 controller does
-     * not support granular retention.
+    /* Do not disable block 0 and block 3 for this target. Block 0 contains SRAM
+     * section for CM0+ CPU and the last 2KB in block 3 is reserved for system
+     * call, which if disabled will result in unexpected behavior.
      */
-    for (uint32_t i = 1; i < 16; i++)
+    for (uint32_t i = 1; i < 3; i++)
     {
         CPUSS->RAM0_PWR_MACRO_CTL[i] = 0x05FA0000;
     }
-
-    CPUSS->RAM1_PWR_CTL = 0x05FA0000;
 }
 
 
