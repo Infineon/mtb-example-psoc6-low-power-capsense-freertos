@@ -1,8 +1,8 @@
 /******************************************************************************
-* File Name:   main.c
+* File Name:   low_power_config.c
 *
-* Description: This is the source code for the <CE Title> Example
-*              for ModusToolbox.
+* Description: This file contains function definitions for low-power
+* configuration of the device.
 *
 * Related Document: See README.md
 *
@@ -40,76 +40,42 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
-#include "cy_pdl.h"
-#include "cyhal.h"
+/*******************************************************************************
+ * Include header files
+ ******************************************************************************/
 #include "cybsp.h"
-#include "cy_retarget_io.h"
+#include "cyhal.h"
+#include "cy_pdl.h"
 
-#include "FreeRTOS.h"
-#include "task.h"
-
-#include "capsense.h"
 #include "low_power_config.h"
 
+
 /*******************************************************************************
-* Function Name: main
+* Function Definitions
+*******************************************************************************/
+
+/*******************************************************************************
+* Function Name: retain_sram_selectively
 ********************************************************************************
-* Summary:
-* This is the main function for CM4 CPU. It does
-*    1. Initialization of board resources.
-*    2. Retains minimum amount of SRAM needed by the example.
-*    3. Creation of CapSense task.
-*    4. Start FreeRTOS scheduler.
-*
-* Parameters:
-*  void
-*
-* Return:
-*  int
+* Summary: This function retains only the minimum amount of SRAM required by the
+* application.
 *
 *******************************************************************************/
-int main(void)
+void retain_sram_selectively(void)
 {
-    cy_rslt_t result;
-
-    /* Initialize the device and board peripherals */
-    result = cybsp_init() ;
-    if (result != CY_RSLT_SUCCESS)
+    /* Do not disable block 0 of SRAM 0, and entire SRAM2 for this target. Block
+     * 0 in SRAM0 contains SRAM section for CM0+ CPU and the last 2KB in SRAM2
+     * is reserved for system call, which if disabled will result in unexpected
+     * behavior. 256 KB of SRAM2 is retained because the SRAM2 controller does
+     * not support granular retention.
+     */
+    for (uint32_t i = 1; i < 16; i++)
     {
-        CY_ASSERT(0);
+        CPUSS->RAM0_PWR_MACRO_CTL[i] = 0x05FA0000;
     }
 
-    /* Retain only required amount of SRAM to decrease current consumption.*/
-    retain_sram_selectively();
-
-    /* Enable global interrupts */
-    __enable_irq();
-
-    /* Initialize retarget-io to use the debug UART port */
-    cy_retarget_io_init(CYBSP_DEBUG_UART_TX, CYBSP_DEBUG_UART_RX, CY_RETARGET_IO_BAUDRATE);
-
-    /* \x1b[2J\x1b[;H - ANSI ESC sequence for clear screen */
-    printf("\x1b[2J\x1b[;H");
-
-    printf("***********************************************\r\n "
-           "PSoC 6 MCU: FreeRTOS Low-power CapSense Example\r\n "
-           "*********************************************** \r\n\n");
-
-    /* Create the CapSense task */
-    xTaskCreate(capsense_task, "CapSense Task", CAPSENSE_TASK_STACK_SIZE_BYTES,
-                NULL, CAPSENSE_TASK_PRIORITY, &capsense_task_handle);
-    
-    /* Start the scheduler */
-    vTaskStartScheduler();
-
-    /* Should never get here! */
-    /* Halt the CPU if scheduler exits */
-    CY_ASSERT(0);
-
-    for(;;)
-    {
-    }
-
+    CPUSS->RAM1_PWR_CTL = 0x05FA0000;
 }
+
 
 /* [] END OF FILE */
