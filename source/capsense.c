@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -55,7 +55,6 @@
 #include "timers.h"
 
 #include <stdio.h>
-
 
 /*******************************************************************************
 * Macros
@@ -142,7 +141,6 @@ static cy_stc_syspm_callback_t capsense_deep_sleep_cb =
     NULL
 };
 
-
 /*******************************************************************************
  * Function prototypes
  ******************************************************************************/
@@ -204,6 +202,7 @@ void capsense_task(void *arg)
     */
    cyhal_syspm_lock_deepsleep();
 #endif /* CAPSENSE_TUNER_ENABLE */
+
     status = initialize_capsense();
 
     if (CYRET_SUCCESS != status)
@@ -354,7 +353,6 @@ void capsense_task(void *arg)
         }
     }
 }
-
 
 /*******************************************************************************
 * Function Name: process_touch
@@ -522,7 +520,6 @@ static void capsense_callback(cy_stc_active_scan_sns_t * ptrActiveScan)
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
-
 /*******************************************************************************
 * Function Name: scan_timer_callback()
 ********************************************************************************
@@ -611,11 +608,10 @@ static void initialize_capsense_tuner(void)
 
     cyhal_ezi2c_register_callback( &sEzI2C, handle_ezi2c_tuner_event, NULL);
     cyhal_ezi2c_enable_event(&sEzI2C,
-                             (CYHAL_EZI2C_STATUS_ERR | CYHAL_EZI2C_STATUS_WRITE1 | CYHAL_EZI2C_STATUS_READ1),
+                             (cyhal_ezi2c_status_t)(CYHAL_EZI2C_STATUS_ERR | CYHAL_EZI2C_STATUS_WRITE1 | CYHAL_EZI2C_STATUS_READ1),
                              EZI2C_INTERRUPT_PRIORITY, true);
 
 }
 #endif /* CAPSENSE_TUNER_ENABLE */
-
 
 /* [] END OF FILE */

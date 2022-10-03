@@ -7,7 +7,7 @@
 #
 ################################################################################
 # \copyright
-# Copyright 2018-2021, Cypress Semiconductor Corporation (an Infineon company)
+# Copyright 2018-2022, Cypress Semiconductor Corporation (an Infineon company)
 # SPDX-License-Identifier: Apache-2.0
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,17 +28,25 @@
 # Basic Configuration
 ################################################################################
 
+#Type of MTB Makefile Options include:
+#
+# COMBINED    -- Top Level Makefile usually for single standalone application
+# APPLICATION -- Top Level Makefile usually for multi project application
+# PROJECT     -- Project Makefile under Application
+#
+MTB_TYPE=COMBINED
+
 # Target board/hardware (BSP).
-# To change the target, it is recommended to use the Library manager 
-# ('make modlibs' from command line), which will also update Eclipse IDE launch 
-# configurations. If TARGET is manually edited, ensure TARGET_<BSP>.mtb with a 
+# To change the target, it is recommended to use the Library manager
+# ('make modlibs' from command line), which will also update Eclipse IDE launch
+# configurations. If TARGET is manually edited, ensure TARGET_<BSP>.mtb with a
 # valid URL exists in the application, run 'make getlibs' to fetch BSP contents
 # and update or regenerate launch configurations for your IDE.
 TARGET=CY8CPROTO-062-4343W
 
 # Name of application (used to derive name of final linked file).
-# 
-# If APPNAME is edited, ensure to update or regenerate launch 
+#
+# If APPNAME is edited, ensure to update or regenerate launch
 # configurations for your IDE.
 APPNAME=mtb-example-psoc6-low-power-capsense-freertos
 
@@ -56,8 +64,8 @@ TOOLCHAIN=GCC_ARM
 # Debug -- build with minimal optimizations, focus on debugging.
 # Release -- build with full optimizations
 # Custom -- build with custom configuration, set the optimization flag in CFLAGS
-# 
-# If CONFIG is manually edited, ensure to update or regenerate launch configurations 
+#
+# If CONFIG is manually edited, ensure to update or regenerate launch configurations
 # for your IDE.
 CONFIG=Debug
 
@@ -79,10 +87,10 @@ VERBOSE=
 # ... then code in directories named COMPONENT_foo and COMPONENT_bar will be
 # added to the build
 #
-COMPONENTS=CUSTOM_DESIGN_MODUS FREERTOS
+COMPONENTS=FREERTOS
 
 # Like COMPONENTS, but disable optional code that was enabled by default.
-DISABLE_COMPONENTS=BSP_DESIGN_MODUS
+DISABLE_COMPONENTS=
 
 # By default the build system automatically looks in the Makefile's directory
 # tree for source code and builds it. The SOURCES variable can be used to
@@ -95,7 +103,7 @@ SOURCES=
 INCLUDES=
 
 # Add additional defines to the build process (without a leading -D).
-DEFINES=
+DEFINES=CAPSENSE_TUNER_ENABLE
 
 # Select softfp or hardfp floating point. Default is softfp.
 VFP_SELECT=
@@ -124,17 +132,6 @@ LDFLAGS=
 # Additional / custom libraries to link in to the application.
 LDLIBS=
 
-# Path to the linker script to use (if empty, use the default linker script).
-ifeq (GCC_ARM, $(TOOLCHAIN))
-LINKER_SCRIPT=$(wildcard ./linker_script/TARGET_$(TARGET)/COMPONENT_CM4/TOOLCHAIN_$(TOOLCHAIN)/*.ld)
-endif
-ifeq (ARM, $(TOOLCHAIN))
-LINKER_SCRIPT=$(wildcard ./linker_script/TARGET_$(TARGET)/COMPONENT_CM4/TOOLCHAIN_$(TOOLCHAIN)/*.sct)
-endif
-ifeq (IAR, $(TOOLCHAIN))
-LINKER_SCRIPT=$(wildcard ./linker_script/TARGET_$(TARGET)/COMPONENT_CM4/TOOLCHAIN_$(TOOLCHAIN)/*.icf)
-endif
-
 # Custom pre-build commands to run.
 PREBUILD=
 
@@ -153,9 +150,9 @@ CY_APP_PATH=
 
 # Relative path to the shared repo location.
 #
-# All .mtb files have the format, <URI>#<COMMIT>#<LOCATION>. If the <LOCATION> field 
-# begins with $$ASSET_REPO$$, then the repo is deposited in the path specified by 
-# the CY_GETLIBS_SHARED_PATH variable. The default location is one directory level 
+# All .mtb files have the format, <URI>#<COMMIT>#<LOCATION>. If the <LOCATION> field
+# begins with $$ASSET_REPO$$, then the repo is deposited in the path specified by
+# the CY_GETLIBS_SHARED_PATH variable. The default location is one directory level
 # above the current app directory.
 # This is used with CY_GETLIBS_SHARED_NAME variable, which specifies the directory name.
 CY_GETLIBS_SHARED_PATH=../
