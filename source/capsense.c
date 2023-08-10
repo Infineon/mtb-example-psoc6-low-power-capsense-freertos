@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -108,6 +108,14 @@
 #define PROCESS_TOUCH                        (3U)
 #define WAIT_IN_DEEP_SLEEP                   (4U)
 #define UNUSED_STATE                         (5U)
+
+
+/* For PSoC 63 device, use lower data rate as IMO is used as Peri Clock source */
+#if defined(CY_DEVICE_PSOC6ABLE2)
+    #define I2C_SPEED_KHZ    (CYHAL_EZI2C_DATA_RATE_100KHZ)
+#else
+    #define I2C_SPEED_KHZ    (CYHAL_EZI2C_DATA_RATE_400KHZ)
+#endif
 
 
 /*******************************************************************************
@@ -594,7 +602,7 @@ static void initialize_capsense_tuner(void)
     sEzI2C_sub_cfg.slave_address = 8U;
 
     /* Configure EzI2C block parameters. */
-    sEzI2C_cfg.data_rate = CYHAL_EZI2C_DATA_RATE_400KHZ;
+    sEzI2C_cfg.data_rate = I2C_SPEED_KHZ;
     sEzI2C_cfg.enable_wake_from_sleep = false;
     sEzI2C_cfg.slave1_cfg = sEzI2C_sub_cfg;
     sEzI2C_cfg.sub_address_size = CYHAL_EZI2C_SUB_ADDR16_BITS;
