@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -57,12 +57,12 @@
 /*******************************************************************************
 * Macros
 *******************************************************************************/
-#define CAPSENSE_INTR_PRIORITY          (6u)
+#define CAPSENSE_INTR_PRIORITY          (7u)
 
 /* EZI2C interrupt priority must be higher than CapSense interrupt. Lower number
  * means higher priority.
  */
-#define EZI2C_INTERRUPT_PRIORITY        (7u)
+#define EZI2C_INTERRUPT_PRIORITY        (6u)
 
 #define CAPSENSE_TASK_STACK_SIZE_BYTES  (512)
 #define CAPSENSE_TASK_PRIORITY          (3U)
