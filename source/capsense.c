@@ -155,7 +155,7 @@ static cy_stc_syspm_callback_t capsense_deep_sleep_cb =
 static cy_status initialize_capsense(void);
 static bool process_touch(uint32_t widget_id, uint32_t *slider_position);
 static void capsense_isr(void);
-static void capsense_callback();
+static void capsense_callback(cy_stc_active_scan_sns_t *ptrActiveScan);
 static void scan_timer_callback( TimerHandle_t scan_timer_handle );
 
 #if (defined(CAPSENSE_TUNER_ENABLE))
